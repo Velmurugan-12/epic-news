@@ -5,8 +5,7 @@ function NewsBoard({ category, newsArticles }) {
   return (
     <div className="pt-5 pb-10 px-4 md:px-8 lg:px-12 min-h-[80vh] bg-gray-700">
       <div className="container mx-auto">
-        
-        
+        {/* Category Title */}
         <h3 className="text-2xl font-semibold text-white mb-6 text-start">
           Latest News: <span className="text-red-500 capitalize">{category}</span>
         </h3>
@@ -17,11 +16,11 @@ function NewsBoard({ category, newsArticles }) {
             newsArticles.map((article, index) => (
               <NewsCard
                 key={index}
-                title={article.title}
-                description={article.description}
-                imageUrl={article.urlToImage}
-                publishedAt={article.publishedAt}
-                readMore={article.url}
+                title={article.title || "No Title Available"}
+                description={article.description || "No description available."}
+                imageUrl={article.image_url} 
+                publishedAt={article.pubDate || "Unknown Date"} 
+                readMore={article.link} 
               />
             ))
           ) : (

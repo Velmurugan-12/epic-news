@@ -4,15 +4,19 @@ import NewsBoard from "./components/NewsBoard";
 import Footer from "./components/Footer";
 
 function App() {
-  const [category, setCategory] = useState("general");
+  const [category, setCategory] = useState("top"); 
   const [newsArticles, setNewsArticles] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const apiKey ="cd1afb985a0441b59e65cd75351459c3";
+  const apiKey = "pub_738480ed7d43b75a282beca88f0e961ca3037"; 
 
   useEffect(() => {
     setLoading(true);
-    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}`;
+    setError(null);
+
+    let apiUrl = `https://newsdata.io/api/1/news?apikey=${apiKey}&country=us&category=${category}`;
+
 
     fetch(apiUrl)
       .then((response) => {
@@ -22,28 +26,28 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        const existedArticles = data.articles.filter(
-          (item) => item.content !== "[Removed]"
-        );
-        setNewsArticles(existedArticles);
+        const validArticles = data.results || []; 
+        setNewsArticles(validArticles);
+        setLoading(false);
         window.scrollTo(0, 0);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        setLoading(false); 
+        setError("Failed to load news. Please try again.");
+        setLoading(false);
       });
-
   }, [category]);
 
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar setCategory={setCategory} />
-    
-      
+
       <div className="flex-grow">
-        <NewsBoard category={category} newsArticles={newsArticles} />
+        {loading && <p className="text-center text-gray-600">Loading...</p>}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!loading && !error && <NewsBoard category={category} newsArticles={newsArticles} />}
       </div>
-      
+
       <Footer />
     </div>
   );

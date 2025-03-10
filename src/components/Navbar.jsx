@@ -11,7 +11,7 @@ const Navbar = ({ setCategory }) => {
     };
 
     const navItems = [
-        { label: "General", category: "general" },
+        { label: "Top", category: "top" },
         { label: "Technology", category: "technology" },
         { label: "Entertainment", category: "entertainment" },
         { label: "Health", category: "health" },
